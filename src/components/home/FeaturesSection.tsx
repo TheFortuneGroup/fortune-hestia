@@ -27,39 +27,35 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section id="features" className="py-16 md:py-24 bg-offwhite">
+    <section id="features" className="section-padding">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-          <h2 className="headline mb-4 md:mb-6 text-gold-dark">Exceptional Features & Amenities</h2>
-          <p className="body-text text-center mx-auto max-w-2xl">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="headline mb-6">Exceptional Features & Amenities</h2>
+          <p className="body-text">
             Fortune Hestia Villa offers an unparalleled living experience with premium features and world-class amenities that cater to your luxury lifestyle.
           </p>
         </div>
 
-        {/* Features grid - 2 cards per row on mobile */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 mb-16 md:mb-20">
+        {/* Features grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
           {features.map((feature, index) => (
-            <div key={index} className="glass-card hover:shadow-xl transition-shadow h-full flex flex-col rounded-lg overflow-hidden border border-gold/20">
-              <div className="bg-gold/10 p-4">
-                <div className="amenity-icon w-12 h-12 flex items-center justify-center bg-gold/20 mx-auto">
-                  <span className="text-xl font-bold text-gold-dark">{index + 1}</span>
-                </div>
+            <div key={index} className="glass-card hover:shadow-xl transition-shadow h-full flex flex-col">
+              <div className="amenity-icon w-12 h-12 flex items-center justify-center">
+                <span className="text-xl font-bold">{index + 1}</span>
               </div>
-              <div className="p-4">
-                <h3 className="feature-heading mb-2 text-center text-gold-dark">{feature.title}</h3>
-                <p className="text-navy/70 text-sm flex-grow text-center">{feature.description}</p>
-              </div>
+              <h3 className="feature-heading mb-3">{feature.title}</h3>
+              <p className="text-navy/70 text-sm flex-grow">{feature.description}</p>
             </div>
           ))}
         </div>
 
         {/* Specifications section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="subheadline mb-6 text-gold-dark text-center lg:text-left">Premium Specifications</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 className="subheadline mb-6">Premium Specifications</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {specifications.map((spec, index) => (
-                <div key={index} className="flex items-start bg-gold/5 p-3 rounded-md">
+                <div key={index} className="flex items-start">
                   <div className="mr-3 mt-1 text-gold">
                     <Check size={18} />
                   </div>
@@ -69,13 +65,13 @@ const FeaturesSection = () => {
             </div>
           </div>
           
-          <div className="relative rounded-lg overflow-hidden shadow-xl">
+          <div className="relative">
             <img 
               src="/lovable-uploads/7218ca4e-0a9f-4bfd-be9c-b21cce641145.png" 
               alt="Villa Interior" 
-              className="w-full h-auto object-cover"
+              className="rounded-lg shadow-xl w-full h-auto object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent rounded-lg"></div>
             <div className="absolute bottom-6 left-6 right-6 text-white">
               <p className="font-serif text-xl md:text-2xl font-semibold mb-2">
                 Architectural Excellence
