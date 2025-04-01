@@ -1,9 +1,16 @@
 
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import ContactForm from './ContactForm';
 
 const HeroSection = () => {
+  const scrollToNextSection = () => {
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="relative min-h-screen flex items-center">
       {/* Background image with overlay */}
@@ -13,7 +20,7 @@ const HeroSection = () => {
           backgroundImage: `url('/lovable-uploads/ebf40fbe-d160-45c8-b2b7-1bfaba9366bc.png')`,
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-navy/80 to-navy/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/80 to-emerald-900/50"></div>
       </div>
       
       <div className="container mx-auto px-4 md:px-6 relative z-10 pt-24">
@@ -21,7 +28,7 @@ const HeroSection = () => {
           {/* Hero content */}
           <div className="lg:col-span-3 text-white animate-fade-in">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              Luxury Living Redefined at <span className="text-gold">Fortune Hestia Villa</span>
+              Luxury Living Redefined at <span className="text-emerald-400">Fortune Hestia Villa</span>
             </h1>
             
             <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl">
@@ -30,7 +37,7 @@ const HeroSection = () => {
             </p>
             
             <div className="flex flex-wrap gap-4 mb-12">
-              <Button className="bg-gold hover:bg-gold-dark text-white rounded-md px-6 py-6 text-lg flex items-center gap-2">
+              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-md px-6 py-6 text-lg flex items-center gap-2 shadow-lg shadow-emerald-900/20">
                 Schedule a Visit
                 <ArrowRight size={18} />
               </Button>
@@ -40,16 +47,16 @@ const HeroSection = () => {
             </div>
             
             <div className="flex flex-wrap gap-x-12 gap-y-6 text-gray-300">
-              <div>
-                <p className="text-3xl md:text-4xl font-serif font-semibold text-gold">10+</p>
+              <div className="bg-emerald-900/30 backdrop-blur-sm p-4 rounded-lg border border-emerald-600/20 animate-pulse-subtle">
+                <p className="text-3xl md:text-4xl font-serif font-semibold text-emerald-400">10+</p>
                 <p className="text-sm uppercase tracking-wider mt-1">Luxury Amenities</p>
               </div>
-              <div>
-                <p className="text-3xl md:text-4xl font-serif font-semibold text-gold">4 & 5 BHK</p>
+              <div className="bg-emerald-900/30 backdrop-blur-sm p-4 rounded-lg border border-emerald-600/20 animate-pulse-subtle">
+                <p className="text-3xl md:text-4xl font-serif font-semibold text-emerald-400">4 & 5 BHK</p>
                 <p className="text-sm uppercase tracking-wider mt-1">Premium Villas</p>
               </div>
-              <div>
-                <p className="text-3xl md:text-4xl font-serif font-semibold text-gold">15 Min</p>
+              <div className="bg-emerald-900/30 backdrop-blur-sm p-4 rounded-lg border border-emerald-600/20 animate-pulse-subtle">
+                <p className="text-3xl md:text-4xl font-serif font-semibold text-emerald-400">15 Min</p>
                 <p className="text-sm uppercase tracking-wider mt-1">To Tech Parks</p>
               </div>
             </div>
@@ -57,8 +64,8 @@ const HeroSection = () => {
           
           {/* Contact form card */}
           <div className="lg:col-span-2 animate-fade-in-right">
-            <div className="bg-white rounded-lg shadow-xl p-6 md:p-8">
-              <h3 className="font-serif text-2xl font-semibold text-navy-dark mb-6">Schedule Your Private Tour</h3>
+            <div className="bg-white rounded-lg shadow-xl p-6 md:p-8 border-t-4 border-emerald-500">
+              <h3 className="font-serif text-2xl font-semibold text-emerald-700 mb-6">Schedule Your Private Tour</h3>
               <ContactForm />
             </div>
           </div>
@@ -66,11 +73,11 @@ const HeroSection = () => {
       </div>
       
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 text-white">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 text-white cursor-pointer" onClick={scrollToNextSection}>
         <div className="flex flex-col items-center">
           <span className="text-sm mb-2">Scroll Down</span>
-          <div className="w-6 h-10 border-2 border-white rounded-full flex items-start justify-center p-1">
-            <div className="w-1.5 h-3 bg-white rounded-full animate-bounce"></div>
+          <div className="w-10 h-10 bg-emerald-600/50 backdrop-blur-sm rounded-full flex items-center justify-center animate-bounce">
+            <ChevronDown size={24} />
           </div>
         </div>
       </div>

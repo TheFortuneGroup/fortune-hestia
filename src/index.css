@@ -48,7 +48,7 @@
   }
 
   body {
-    @apply bg-white text-navy font-sans antialiased;
+    @apply bg-white text-gray-800 font-sans antialiased;
   }
 }
 
@@ -58,27 +58,27 @@
   }
 
   .headline {
-    @apply font-serif text-4xl md:text-5xl lg:text-6xl leading-tight font-semibold text-navy-dark;
+    @apply font-serif text-4xl md:text-5xl lg:text-6xl leading-tight font-semibold text-emerald-800;
   }
 
   .subheadline {
-    @apply font-serif text-2xl md:text-3xl font-medium text-navy;
+    @apply font-serif text-2xl md:text-3xl font-medium text-emerald-700;
   }
 
   .feature-heading {
-    @apply font-serif text-xl md:text-2xl font-medium text-navy-dark;
+    @apply font-serif text-xl md:text-2xl font-medium text-emerald-700;
   }
 
   .body-text {
-    @apply text-base md:text-lg text-navy/80 leading-relaxed;
+    @apply text-base md:text-lg text-gray-700 leading-relaxed;
   }
 
   .btn-primary {
-    @apply bg-gold text-white px-6 py-3 rounded hover:bg-gold-dark transition-colors duration-300 font-medium;
+    @apply bg-emerald-600 text-white px-6 py-3 rounded hover:bg-emerald-700 transition-colors duration-300 font-medium;
   }
 
   .btn-secondary {
-    @apply bg-transparent border-2 border-gold text-navy px-6 py-3 rounded hover:bg-gold/5 transition-colors duration-300 font-medium;
+    @apply bg-transparent border-2 border-emerald-600 text-emerald-700 px-6 py-3 rounded hover:bg-emerald-50 transition-colors duration-300 font-medium;
   }
 
   .parallax-container {
@@ -90,19 +90,27 @@
   }
 
   .section-title {
-    @apply font-serif text-3xl md:text-4xl text-navy-dark font-semibold relative pb-4 mb-8 inline-block;
+    @apply font-serif text-3xl md:text-4xl text-emerald-800 font-semibold relative pb-4 mb-8 inline-block;
   }
 
   .section-title::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-2/3 h-1 bg-gold rounded;
+    @apply absolute bottom-0 left-0 w-2/3 h-1 bg-emerald-500 rounded;
   }
 
   .amenity-icon {
-    @apply bg-gold/10 text-gold p-4 rounded-full mb-4;
+    @apply bg-emerald-50 text-emerald-600 p-4 rounded-full mb-4;
   }
 
   .contact-input {
-    @apply w-full bg-white/80 backdrop-blur border border-gray-200 rounded-md p-3 focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition;
+    @apply w-full bg-white border border-gray-200 rounded-md p-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition;
+  }
+  
+  .animated-card {
+    @apply transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl;
+  }
+  
+  .gradient-heading {
+    @apply bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent;
   }
 }

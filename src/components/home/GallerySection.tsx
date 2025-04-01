@@ -63,7 +63,7 @@ const GallerySection = () => {
           {/* Navigation arrows */}
           <Button
             onClick={prevImage}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-navy rounded-full p-2 shadow-lg"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-emerald-700 rounded-full p-2 shadow-lg"
             size="icon"
           >
             <ArrowLeft size={24} />
@@ -71,7 +71,7 @@ const GallerySection = () => {
           
           <Button
             onClick={nextImage}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-navy rounded-full p-2 shadow-lg"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-emerald-700 rounded-full p-2 shadow-lg"
             size="icon"
           >
             <ArrowRight size={24} />
@@ -93,7 +93,7 @@ const GallerySection = () => {
               <div
                 key={index}
                 className={`gallery-thumb flex-shrink-0 cursor-pointer transition-all duration-300 ${
-                  activeIndex === index ? 'ring-2 ring-gold' : 'ring-0 opacity-70'
+                  activeIndex === index ? 'ring-2 ring-emerald-600' : 'ring-0 opacity-70'
                 }`}
                 onClick={() => setActiveIndex(index)}
               >
@@ -109,13 +109,14 @@ const GallerySection = () => {
         
         {/* Virtual tour button */}
         <div className="text-center mt-10">
-          <Button className="bg-navy hover:bg-navy-light text-white rounded px-6 py-3">
+          <Button className="bg-emerald-700 hover:bg-emerald-800 text-white rounded px-6 py-3">
             Take a Virtual Tour
           </Button>
         </div>
       </div>
       
-      <style jsx>{`
+      <style>
+        {`
         .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
@@ -123,7 +124,8 @@ const GallerySection = () => {
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
         }
-      `}</style>
+        `}
+      </style>
     </section>
   );
 };
