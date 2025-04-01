@@ -21,8 +21,8 @@ const Navbar = () => {
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-md py-2' 
-          : 'bg-transparent py-4'
+          ? 'bg-white shadow-md py-2' 
+          : 'bg-white py-4'
       }`}
     >
       <div className="container mx-auto px-4 md:px-6">
@@ -46,7 +46,7 @@ const Navbar = () => {
             </nav>
             
             <div className="flex items-center">
-              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-md flex items-center gap-2">
+              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-md flex items-center gap-2 shadow-md">
                 <Calendar size={16} />
                 <span>Schedule Visit</span>
               </Button>
@@ -82,7 +82,7 @@ const Navbar = () => {
             <a href="#contact" className="py-2 text-gray-800 hover:text-emerald-600 transition-colors" onClick={() => setMobileMenuOpen(false)}>Contact</a>
           </nav>
           <div className="px-4 pb-4">
-            <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-md flex items-center justify-center gap-2 py-2">
+            <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-md flex items-center justify-center gap-2 py-2 shadow-md">
               <Calendar size={16} />
               <span>Schedule Visit</span>
             </Button>

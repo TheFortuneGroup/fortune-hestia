@@ -9,6 +9,7 @@ import LocationSection from "@/components/home/LocationSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CtaSection from "@/components/home/CtaSection";
 import ContactSection from "@/components/home/ContactSection";
+import PopupForm from "@/components/home/PopupForm";
 import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
@@ -27,6 +28,7 @@ const Index = () => {
       </main>
       <Footer />
       <Toaster />
+      <PopupForm />
     </div>
   );
 };

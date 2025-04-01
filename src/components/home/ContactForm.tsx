@@ -78,10 +78,10 @@ const ContactForm = ({ formType = "contact" }: { formType?: "contact" | "brochur
   
   if (submitted && formType === "brochure") {
     return (
-      <div className="text-center py-6 px-4 bg-emerald-50 rounded-lg border border-emerald-100">
-        <div className="mb-4 bg-emerald-100 rounded-full h-16 w-16 flex items-center justify-center mx-auto">
+      <div className="text-center py-8 px-6 bg-emerald-50 rounded-lg border border-emerald-100 shadow-md animate-fade-in">
+        <div className="mb-6 bg-emerald-100 rounded-full h-20 w-20 flex items-center justify-center mx-auto shadow-inner">
           <svg 
-            className="h-8 w-8 text-emerald-600" 
+            className="h-10 w-10 text-emerald-600" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24" 
@@ -95,12 +95,12 @@ const ContactForm = ({ formType = "contact" }: { formType?: "contact" | "brochur
             ></path>
           </svg>
         </div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">Thank You!</h3>
-        <p className="text-gray-600 mb-4">
+        <h3 className="text-2xl font-serif font-semibold text-emerald-800 mb-3">Thank You!</h3>
+        <p className="text-gray-600 mb-6">
           Your request for the brochure has been received. Our sales representative will get in touch with you shortly.
         </p>
         <Button 
-          className="bg-emerald-600 hover:bg-emerald-700 text-white"
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
           onClick={() => {
             setSubmitted(false);
             setFormData({
@@ -119,7 +119,7 @@ const ContactForm = ({ formType = "contact" }: { formType?: "contact" | "brochur
   }
   
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div className="space-y-4">
         <div className="relative">
           <input
@@ -129,7 +129,7 @@ const ContactForm = ({ formType = "contact" }: { formType?: "contact" | "brochur
             onChange={handleChange}
             placeholder="Your Name *"
             required
-            className="contact-input pl-10"
+            className="enhanced-form-input pl-12 shadow-sm"
           />
           <span className="absolute left-3 top-3.5 text-emerald-500">
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -146,7 +146,7 @@ const ContactForm = ({ formType = "contact" }: { formType?: "contact" | "brochur
             onChange={handleChange}
             placeholder="Email Address *"
             required
-            className="contact-input pl-10"
+            className="enhanced-form-input pl-12 shadow-sm"
           />
           <span className="absolute left-3 top-3.5 text-emerald-500">
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -163,7 +163,7 @@ const ContactForm = ({ formType = "contact" }: { formType?: "contact" | "brochur
             onChange={handleChange}
             placeholder="Phone Number *"
             required
-            className="contact-input pl-10"
+            className="enhanced-form-input pl-12 shadow-sm"
           />
           <span className="absolute left-3 top-3.5 text-emerald-500">
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -177,7 +177,7 @@ const ContactForm = ({ formType = "contact" }: { formType?: "contact" | "brochur
             name="interestedIn"
             value={formData.interestedIn}
             onChange={handleChange}
-            className="contact-input pl-10 appearance-none"
+            className="enhanced-form-input pl-12 appearance-none shadow-sm"
           >
             <option value="Not specified">Interested in...</option>
             <option value="4 BHK Villa">4 BHK Villa</option>
@@ -205,7 +205,7 @@ const ContactForm = ({ formType = "contact" }: { formType?: "contact" | "brochur
               onChange={handleChange}
               placeholder="Your Message"
               rows={3}
-              className="contact-input pl-10 resize-none"
+              className="enhanced-form-input pl-12 resize-none shadow-sm"
             ></textarea>
             <span className="absolute left-3 top-3.5 text-emerald-500">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -219,7 +219,7 @@ const ContactForm = ({ formType = "contact" }: { formType?: "contact" | "brochur
           <Button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-md font-medium relative"
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-md font-medium relative shadow-md"
           >
             {loading ? (
               <>
