@@ -54,19 +54,19 @@
 
 @layer components {
   .section-padding {
-    @apply py-16 md:py-24;
+    @apply py-12 md:py-20 px-4 md:px-0;
   }
 
   .headline {
-    @apply font-serif text-4xl md:text-5xl lg:text-6xl leading-tight font-semibold text-emerald-800;
+    @apply font-serif text-3xl md:text-4xl lg:text-5xl leading-tight font-semibold text-navy;
   }
 
   .subheadline {
-    @apply font-serif text-2xl md:text-3xl font-medium text-emerald-700;
+    @apply font-serif text-2xl md:text-3xl font-medium text-navy;
   }
 
   .feature-heading {
-    @apply font-serif text-xl md:text-2xl font-medium text-emerald-700;
+    @apply font-serif text-lg md:text-xl font-medium text-navy;
   }
 
   .body-text {
@@ -74,11 +74,11 @@
   }
 
   .btn-primary {
-    @apply bg-emerald-600 text-white px-6 py-3 rounded hover:bg-emerald-700 transition-colors duration-300 font-medium shadow-md;
+    @apply bg-gold text-navy-dark px-6 py-3 rounded hover:bg-gold-light transition-colors duration-300 font-medium shadow-md;
   }
 
   .btn-secondary {
-    @apply bg-transparent border-2 border-emerald-600 text-emerald-700 px-6 py-3 rounded hover:bg-emerald-50 transition-colors duration-300 font-medium shadow-sm;
+    @apply bg-transparent border-2 border-gold text-navy px-6 py-3 rounded hover:bg-gold/5 transition-colors duration-300 font-medium shadow-sm;
   }
 
   .parallax-container {
@@ -86,24 +86,24 @@
   }
 
   .glass-card {
-    @apply bg-white/90 backdrop-blur-md shadow-lg rounded-lg p-8 border border-white/20;
+    @apply bg-white/90 backdrop-blur-md shadow-lg rounded-lg p-6 border border-white/20;
   }
 
   .section-title {
-    @apply font-serif text-3xl md:text-4xl text-emerald-800 font-semibold relative pb-4 mb-8 inline-block;
+    @apply font-serif text-2xl md:text-3xl text-gold-dark font-semibold relative pb-4 mb-6 inline-block;
   }
 
   .section-title::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-2/3 h-1 bg-emerald-500 rounded;
+    @apply absolute bottom-0 left-0 right-0 mx-auto md:mx-0 md:right-auto w-2/3 h-1 bg-gold rounded;
   }
 
   .amenity-icon {
-    @apply bg-emerald-50 text-emerald-600 p-4 rounded-full mb-4 shadow-sm;
+    @apply bg-gold/10 text-gold p-4 rounded-full mb-4 shadow-sm;
   }
 
   .contact-input {
-    @apply w-full bg-white border border-gray-200 rounded-md p-3 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition;
+    @apply w-full bg-white border border-gray-200 rounded-md p-3 focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition;
   }
   
   .animated-card {
@@ -111,10 +111,10 @@
   }
   
   .gradient-heading {
-    @apply bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-gold-dark to-gold bg-clip-text text-transparent;
   }
 
-  /* New animation classes for popup */
+  /* Animation classes for popup */
   .animate-fade-in {
     animation: fadeIn 0.3s ease-out forwards;
   }
@@ -128,7 +128,7 @@
   }
 
   .enhanced-form-input {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all duration-200;
+    @apply w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition-all duration-200;
   }
 }
 
@@ -170,5 +170,24 @@
 
 /* Enhanced card styles */
 .enhanced-card {
-  @apply bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl;
+  @apply bg-white rounded-xl shadow-lg border border-gold/10 overflow-hidden transition-all duration-300 hover:shadow-xl;
+}
+
+/* Add spacing between sections on mobile */
+@media (max-width: 768px) {
+  section {
+    @apply py-12;
+  }
+  
+  .container {
+    @apply px-4;
+  }
+  
+  h2, h3 {
+    @apply text-center;
+  }
+  
+  .section-title::after {
+    @apply mx-auto;
+  }
 }
