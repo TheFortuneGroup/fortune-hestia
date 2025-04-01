@@ -46,8 +46,8 @@ const Index = () => {
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-md relative overflow-hidden animate-scale-in">
-            <div className="bg-gold p-4">
-              <h3 className="text-navy-dark font-serif text-2xl font-bold text-center">
+            <div className="bg-purple-600 p-4">
+              <h3 className="text-white font-serif text-2xl font-bold text-center">
                 Limited Time Offer!
               </h3>
             </div>
@@ -67,7 +67,7 @@ const Index = () => {
                 Our sales representative will contact you within 24 hours to schedule your personalized tour.
               </p>
               
-              <PopupForm onClose={() => setShowPopup(false)} />
+              <PopupForm />
             </div>
           </div>
         </div>
