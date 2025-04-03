@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  NorthIcon, 
-  SouthIcon, 
-  EastIcon, 
-  WestIcon,
+  ArrowUp, 
+  ArrowDown, 
+  ArrowRight, 
+  ArrowLeft,
   SquareIcon,
   BedDoubleIcon,
   BathIcon,
@@ -34,10 +34,10 @@ const VillaType = ({
 }) => {
   const getDirectionIcon = () => {
     switch (direction) {
-      case "North": return <NorthIcon className="w-5 h-5 text-emerald-500" />;
-      case "South": return <SouthIcon className="w-5 h-5 text-emerald-500" />;
-      case "East": return <EastIcon className="w-5 h-5 text-emerald-500" />;
-      case "West": return <WestIcon className="w-5 h-5 text-emerald-500" />;
+      case "North": return <ArrowUp className="w-5 h-5 text-emerald-500" />;
+      case "South": return <ArrowDown className="w-5 h-5 text-emerald-500" />;
+      case "East": return <ArrowRight className="w-5 h-5 text-emerald-500" />;
+      case "West": return <ArrowLeft className="w-5 h-5 text-emerald-500" />;
     }
   };
 
