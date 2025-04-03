@@ -78,6 +78,52 @@ const ImageUploader = () => {
   const [imageName, setImageName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [storageReady, setStorageReady] = useState(false);
+
+  const checkAndCreateBucket = async () => {
+    try {
+      const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+      
+      if (listError) {
+        console.error("Error checking buckets:", listError);
+        return false;
+      }
+      
+      const bucketExists = buckets.some(bucket => bucket.name === 'villa_images');
+      
+      if (!bucketExists) {
+        const { error: createError } = await supabase.storage.createBucket('villa_images', {
+          public: true
+        });
+        
+        if (createError) {
+          console.error("Error creating bucket:", createError);
+          toast({
+            title: "Storage Error",
+            description: "Could not create storage bucket: " + createError.message,
+            variant: "destructive",
+          });
+          return false;
+        }
+        
+        toast({
+          title: "Storage Initialized",
+          description: "Storage bucket created successfully",
+        });
+      }
+      
+      setStorageReady(true);
+      return true;
+    } catch (error) {
+      console.error("Storage initialization error:", error);
+      toast({
+        title: "Storage Error",
+        description: "Could not initialize storage: " + error.message,
+        variant: "destructive",
+      });
+      return false;
+    }
+  };
 
   const fetchImages = async () => {
     setIsLoading(true);
@@ -102,7 +148,9 @@ const ImageUploader = () => {
   };
 
   useEffect(() => {
-    fetchImages();
+    checkAndCreateBucket().then(() => {
+      fetchImages();
+    });
   }, []);
 
   const handleFileChange = (e) => {
@@ -120,6 +168,11 @@ const ImageUploader = () => {
         variant: "destructive",
       });
       return;
+    }
+
+    if (!storageReady) {
+      const isReady = await checkAndCreateBucket();
+      if (!isReady) return;
     }
 
     setIsUploading(true);
@@ -176,11 +229,15 @@ const ImageUploader = () => {
       const urlParts = url.split('/');
       const filePath = urlParts[urlParts.length - 1];
       
-      const { error: storageError } = await supabase.storage
-        .from('villa_images')
-        .remove([filePath]);
-      
-      if (storageError) throw storageError;
+      if (storageReady && url.includes('villa_images')) {
+        const { error: storageError } = await supabase.storage
+          .from('villa_images')
+          .remove([filePath]);
+        
+        if (storageError) {
+          console.warn("Storage error (continuing anyway):", storageError);
+        }
+      }
       
       const { error } = await supabase
         .from('images')
@@ -255,6 +312,17 @@ const ImageUploader = () => {
 
   return (
     <div className="space-y-6">
+      {!storageReady && (
+        <Card className="bg-yellow-50 border-yellow-200">
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2 text-yellow-700">
+              <AlertCircle className="h-5 w-5" />
+              <p>Storage is being initialized. Please wait or try refreshing.</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">

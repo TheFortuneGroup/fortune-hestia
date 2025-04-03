@@ -1,52 +1,63 @@
 
 import { Check } from 'lucide-react';
+import { 
+  Dumbbell, 
+  TennisBall, 
+  Users, 
+  Building2, 
+  PlayCircle, 
+  Swim, 
+  Timer, 
+  Flower2, 
+  Baby 
+} from 'lucide-react';
 
 const FeaturesSection = () => {
   const amenities = [
     { 
       title: "Gym", 
       description: "State-of-the-art fitness center with modern equipment",
-      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#1"
+      icon: Dumbbell
     },
     { 
       title: "Tennis Court", 
       description: "Professional tennis court with night lighting",
-      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#2"
+      icon: TennisBall
     },
     { 
       title: "Amphitheater", 
       description: "Open-air amphitheater for community events",
-      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#3"
+      icon: Users
     },
     { 
       title: "Club House", 
       description: "Luxurious club house with indoor games and lounge",
-      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#4"
+      icon: Building2
     },
     { 
       title: "Play Park", 
       description: "Children's play area with safe modern equipment",
-      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#5"
+      icon: PlayCircle
     },
     { 
       title: "Swimming Pool", 
       description: "Temperature-controlled swimming pool with deck area",
-      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#6"
+      icon: Swim
     },
     { 
       title: "Jogging Track", 
       description: "Dedicated jogging track for fitness enthusiasts",
-      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#7"
+      icon: Timer
     },
     { 
       title: "Garden Area", 
       description: "Beautifully landscaped gardens for relaxation",
-      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#8"
+      icon: Flower2
     },
     { 
       title: "Kids Play Area", 
       description: "Dedicated play zone for children with safe equipment",
-      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#9"
+      icon: Baby
     }
   ];
 
@@ -77,14 +88,10 @@ const FeaturesSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
           {amenities.map((amenity, index) => (
             <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow h-full flex flex-col">
-              <div className="aspect-w-16 aspect-h-9 bg-gray-100">
-                <img 
-                  src={amenity.image} 
-                  alt={amenity.title} 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-4 flex flex-col flex-grow">
+              <div className="p-6 flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mb-4">
+                  <amenity.icon size={32} className="text-emerald-600" />
+                </div>
                 <h3 className="text-xl font-serif font-semibold text-emerald-700 text-center mb-2">{amenity.title}</h3>
                 <p className="text-gray-600 text-sm text-center">{amenity.description}</p>
               </div>
