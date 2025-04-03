@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,48 +9,62 @@ import {
   Upload, 
   Save, 
   Trash, 
-  Check, 
   Settings, 
   Home,
   LayoutDashboard,
   FileImage,
   Users,
   Building,
-  MailOpen 
+  MailOpen,
+  AlertCircle
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
-// Mock data for demo purposes
-const mockImages = [
-  { id: 1, name: "Villa Exterior", category: "exterior", url: "/lovable-uploads/ebf40fbe-d160-45c8-b2b7-1bfaba9366bc.png" },
-  { id: 2, name: "Villa Interior", category: "interior", url: "/lovable-uploads/7218ca4e-0a9f-4bfd-be9c-b21cce641145.png" },
-  { id: 3, name: "Floor Plan", category: "floorplan", url: "/lovable-uploads/47ff2bfb-aac2-4c57-8739-3348f2edcc90.png" },
-  { id: 4, name: "Aerial View", category: "exterior", url: "/lovable-uploads/76c37ef2-49ee-49f7-a6b5-07a19f9ba26b.png" },
-];
-
-const mockLeads = [
-  { id: 1, name: "John Doe", email: "john@example.com", phone: "+91 9876543210", date: "2023-08-15", status: "New" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "+91 9876543211", date: "2023-08-14", status: "Contacted" },
-  { id: 3, name: "David Kumar", email: "david@example.com", phone: "+91 9876543212", date: "2023-08-13", status: "Interested" },
-  { id: 4, name: "Priya Sharma", email: "priya@example.com", phone: "+91 9876543213", date: "2023-08-12", status: "Visited" },
-];
-
-// Component for uploading images
 const ImageUploader = () => {
   const { toast } = useToast();
   const [category, setCategory] = useState("exterior");
-  const [images, setImages] = useState(mockImages);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [subCategory, setSubCategory] = useState("north");
+  const [images, setImages] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [imageName, setImageName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const fetchImages = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('images')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      setImages(data || []);
+    } catch (error) {
+      console.error("Error fetching images:", error);
+      toast({
+        title: "Error fetching images",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
       setImageName(e.target.files[0].name.split('.')[0]);
     }
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!selectedFile || !imageName) {
       toast({
         title: "Error",
@@ -61,36 +74,137 @@ const ImageUploader = () => {
       return;
     }
 
-    // In a real app, we would upload the file to a server
-    // For demo purposes, we'll just add it to our local state
-    const newId = Math.max(...images.map(img => img.id)) + 1;
-    const newImage = {
-      id: newId,
-      name: imageName,
-      category: category,
-      // Create a temporary URL for the selected file
-      url: URL.createObjectURL(selectedFile)
-    };
-
-    setImages([...images, newImage]);
-    setSelectedFile(null);
-    setImageName("");
-
-    toast({
-      title: "Success",
-      description: "Image uploaded successfully",
-      variant: "default",
-    });
+    setIsUploading(true);
+    
+    try {
+      const fileExt = selectedFile.name.split('.').pop();
+      const fileName = `${category}_${subCategory}_${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+      
+      const { data: storageData, error: storageError } = await supabase.storage
+        .from('villa_images')
+        .upload(filePath, selectedFile);
+      
+      if (storageError) throw storageError;
+      
+      const { data: publicUrlData } = supabase.storage
+        .from('villa_images')
+        .getPublicUrl(filePath);
+      
+      const publicUrl = publicUrlData.publicUrl;
+      
+      const { data, error } = await supabase
+        .from('images')
+        .insert({
+          name: imageName,
+          url: publicUrl,
+          category: category,
+          subcategory: subCategory
+        });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Success",
+        description: "Image uploaded successfully",
+      });
+      
+      setSelectedFile(null);
+      setImageName("");
+      fetchImages();
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast({
+        title: "Upload Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
-  const handleDelete = (id: number) => {
-    setImages(images.filter(img => img.id !== id));
-    toast({
-      title: "Deleted",
-      description: "Image removed successfully",
-      variant: "default",
-    });
+  const handleDelete = async (id, url) => {
+    try {
+      const urlParts = url.split('/');
+      const filePath = urlParts[urlParts.length - 1];
+      
+      const { error: storageError } = await supabase.storage
+        .from('villa_images')
+        .remove([filePath]);
+      
+      if (storageError) throw storageError;
+      
+      const { error } = await supabase
+        .from('images')
+        .delete()
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Deleted",
+        description: "Image removed successfully",
+      });
+      
+      setImages(images.filter(img => img.id !== id));
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      toast({
+        title: "Delete Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
+
+  const getSubCategoryOptions = () => {
+    switch(category) {
+      case "exterior":
+        return [
+          { value: "north", label: "North View" },
+          { value: "south", label: "South View" },
+          { value: "east", label: "East View" },
+          { value: "west", label: "West View" },
+          { value: "aerial", label: "Aerial View" }
+        ];
+      case "interior":
+        return [
+          { value: "living", label: "Living Room" },
+          { value: "kitchen", label: "Kitchen" },
+          { value: "bedroom", label: "Bedroom" },
+          { value: "bathroom", label: "Bathroom" },
+          { value: "other", label: "Other Spaces" }
+        ];
+      case "floorplan":
+        return [
+          { value: "north_ground", label: "North Facing - Ground Floor" },
+          { value: "north_first", label: "North Facing - First Floor" },
+          { value: "north_second", label: "North Facing - Second Floor" },
+          { value: "south_ground", label: "South Facing - Ground Floor" },
+          { value: "south_first", label: "South Facing - First Floor" },
+          { value: "south_second", label: "South Facing - Second Floor" },
+          { value: "east_ground", label: "East Facing - Ground Floor" },
+          { value: "east_first", label: "East Facing - First Floor" },
+          { value: "east_second", label: "East Facing - Second Floor" },
+          { value: "west_ground", label: "West Facing - Ground Floor" },
+          { value: "west_first", label: "West Facing - First Floor" },
+          { value: "west_second", label: "West Facing - Second Floor" }
+        ];
+      case "amenity":
+        return [
+          { value: "pool", label: "Swimming Pool" },
+          { value: "gym", label: "Gymnasium" },
+          { value: "garden", label: "Garden" },
+          { value: "clubhouse", label: "Clubhouse" },
+          { value: "other", label: "Other Amenities" }
+        ];
+      default:
+        return [{ value: "default", label: "Default" }];
+    }
+  };
+
+  const subCategoryOptions = getSubCategoryOptions();
 
   return (
     <div className="space-y-6">
@@ -104,7 +218,7 @@ const ImageUploader = () => {
         <CardContent>
           <div className="grid gap-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="col-span-2">
+              <div>
                 <label className="block text-sm font-medium mb-1">Image Name</label>
                 <Input
                   value={imageName}
@@ -117,12 +231,29 @@ const ImageUploader = () => {
                 <select
                   className="w-full rounded-md border border-input bg-background px-3 py-2"
                   value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    setSubCategory(getSubCategoryOptions()[0].value);
+                  }}
                 >
                   <option value="exterior">Exterior</option>
                   <option value="interior">Interior</option>
                   <option value="floorplan">Floor Plan</option>
                   <option value="amenity">Amenity</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Sub-Category</label>
+                <select
+                  className="w-full rounded-md border border-input bg-background px-3 py-2"
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                >
+                  {subCategoryOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -147,9 +278,13 @@ const ImageUploader = () => {
                 </label>
               </div>
             </div>
-            <Button onClick={handleUpload} className="bg-emerald-600 hover:bg-emerald-700">
+            <Button 
+              onClick={handleUpload} 
+              className="bg-emerald-600 hover:bg-emerald-700"
+              disabled={isUploading}
+            >
               <PlusCircle className="mr-2 h-4 w-4" />
-              Upload Image
+              {isUploading ? "Uploading..." : "Upload Image"}
             </Button>
           </div>
         </CardContent>
@@ -163,47 +298,57 @@ const ImageUploader = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {images.map((image) => (
-              <Card key={image.id} className="overflow-hidden">
-                <div className="aspect-square relative bg-gray-100">
-                  <img 
-                    src={image.url} 
-                    alt={image.name} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <CardContent className="p-3">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-medium text-sm truncate">{image.name}</p>
-                      <p className="text-xs text-gray-500 capitalize">{image.category}</p>
-                    </div>
-                    <Button 
-                      variant="destructive" 
-                      size="icon" 
-                      className="h-8 w-8"
-                      onClick={() => handleDelete(image.id)}
-                    >
-                      <Trash className="h-4 w-4" />
-                    </Button>
+          {isLoading ? (
+            <div className="text-center py-4">Loading images...</div>
+          ) : images.length === 0 ? (
+            <div className="text-center py-4 flex flex-col items-center">
+              <AlertCircle className="h-8 w-8 text-gray-400 mb-2" />
+              <p>No images found. Upload some images to get started.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {images.map((image) => (
+                <Card key={image.id} className="overflow-hidden">
+                  <div className="aspect-square relative bg-gray-100">
+                    <img 
+                      src={image.url} 
+                      alt={image.name} 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  <CardContent className="p-3">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="font-medium text-sm truncate">{image.name}</p>
+                        <p className="text-xs text-gray-500 capitalize">
+                          {image.category} - {image.subcategory?.replace(/_/g, ' ')}
+                        </p>
+                      </div>
+                      <Button 
+                        variant="destructive" 
+                        size="icon" 
+                        className="h-8 w-8"
+                        onClick={() => handleDelete(image.id, image.url)}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
   );
 };
 
-// Component for managing leads
 const LeadManager = () => {
   const { toast } = useToast();
-  const [leads, setLeads] = useState(mockLeads);
+  const [leads, setLeads] = useState([]);
 
-  const handleStatusChange = (id: number, newStatus: string) => {
+  const handleStatusChange = (id, newStatus) => {
     setLeads(leads.map(lead => 
       lead.id === id ? { ...lead, status: newStatus } : lead
     ));
@@ -215,7 +360,7 @@ const LeadManager = () => {
     });
   };
 
-  const handleDeleteLead = (id: number) => {
+  const handleDeleteLead = (id) => {
     setLeads(leads.filter(lead => lead.id !== id));
     
     toast({
@@ -289,7 +434,6 @@ const LeadManager = () => {
   );
 };
 
-// Component for site settings
 const SiteSettings = () => {
   const { toast } = useToast();
   const [settings, setSettings] = useState({
@@ -302,7 +446,6 @@ const SiteSettings = () => {
   });
 
   const handleSave = () => {
-    // In a real app, we would save to a database
     toast({
       title: "Settings Saved",
       description: "Website settings have been updated successfully",
@@ -376,7 +519,6 @@ const SiteSettings = () => {
   );
 };
 
-// Main Admin component
 const Admin = () => {
   return (
     <div className="min-h-screen bg-gray-100">

@@ -1,12 +1,22 @@
 
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown, X, Download } from 'lucide-react';
 import ContactForm from './ContactForm';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const HeroSection = () => {
   const [showContactDialog, setShowContactDialog] = useState(false);
+  const [showBrochureDialog, setShowBrochureDialog] = useState(false);
+  const [brochureFormData, setBrochureFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   
   const scrollToNextSection = () => {
     const aboutSection = document.getElementById('about');
@@ -20,27 +30,72 @@ const HeroSection = () => {
   };
 
   const handleDownloadBrochure = () => {
-    // Create a "dummy" download for the brochure
-    const link = document.createElement('a');
-    link.href = '/fortune-hestia-brochure.pdf'; // This would be replaced with the actual brochure
-    link.download = 'Fortune-Hestia-Villa-Brochure.pdf';
-    link.target = '_blank';
+    setShowBrochureDialog(true);
+  };
+
+  const handleBrochureFormChange = (e) => {
+    const { name, value } = e.target;
+    setBrochureFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleBrochureSubmit = async (e) => {
+    e.preventDefault();
     
-    // Add fallback for browsers that don't support download attribute
-    link.onclick = (e) => {
-      // If the file doesn't exist, show a message
-      const toast = document.createEvent('CustomEvent');
-      toast.initCustomEvent('toast', true, true, {
-        title: 'Brochure Download',
-        description: 'Your brochure download has started. Thank you for your interest!',
-        variant: 'default',
+    if (!brochureFormData.name || !brochureFormData.email || !brochureFormData.phone) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all the required fields",
+        variant: "destructive",
       });
-      document.dispatchEvent(toast);
-    };
+      return;
+    }
     
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    setIsSubmitting(true);
+    
+    try {
+      // Save lead to Supabase
+      const { error } = await supabase
+        .from('leads')
+        .insert({
+          name: brochureFormData.name,
+          email: brochureFormData.email,
+          phone: brochureFormData.phone,
+          property_interest: 'Both',
+          timeframe: 'Immediate',
+          status: 'Brochure Request'
+        });
+        
+      if (error) throw error;
+      
+      // Display toast
+      toast({
+        title: "Brochure Request Submitted",
+        description: "Our representative will contact you shortly with the brochure!",
+      });
+      
+      // Reset form
+      setBrochureFormData({
+        name: '',
+        email: '',
+        phone: '',
+      });
+      
+      // Close dialog
+      setShowBrochureDialog(false);
+      
+    } catch (error) {
+      console.error("Error submitting brochure request:", error);
+      toast({
+        title: "Submission Error",
+        description: "There was a problem submitting your request. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -126,6 +181,71 @@ const HeroSection = () => {
             </DialogTitle>
           </DialogHeader>
           <ContactForm variant="dialog" onSuccess={() => setShowContactDialog(false)} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Brochure Request Dialog */}
+      <Dialog open={showBrochureDialog} onOpenChange={setShowBrochureDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl font-serif text-emerald-700">
+              Request Brochure
+            </DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <p className="text-center text-gray-600 mb-6">
+              Fill in your details to receive our exclusive brochure. Our representative will contact you shortly.
+            </p>
+            <form onSubmit={handleBrochureSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  value={brochureFormData.name}
+                  onChange={handleBrochureFormChange}
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  value={brochureFormData.email}
+                  onChange={handleBrochureFormChange}
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  value={brochureFormData.phone}
+                  onChange={handleBrochureFormChange}
+                />
+              </div>
+              
+              <Button 
+                type="submit" 
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 flex items-center justify-center gap-2"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Processing..." : "Request Brochure"}
+                <Download size={16} />
+              </Button>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
