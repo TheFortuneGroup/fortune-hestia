@@ -3,12 +3,65 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Download, X } from 'lucide-react';
 import ContactForm from './ContactForm';
+import { toast } from '@/components/ui/use-toast';
 
 const CtaSection = () => {
   const [showBrochureForm, setShowBrochureForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleBrochureDownload = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // Simulate API call
+      console.log(`Sending brochure download request: ${JSON.stringify(formData)}`);
+      
+      // In a real implementation, this would be an actual API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Simulate a file download
+      const link = document.createElement('a');
+      link.href = '#'; // This would be the actual brochure URL
+      link.setAttribute('download', 'Fortune-Hestia-Villa-Brochure.pdf');
+      document.body.appendChild(link);
+      // link.click(); // Commented for simulation only
+      document.body.removeChild(link);
+      
+      toast({
+        title: "Brochure download initiated!",
+        description: "Thank you for your interest. Your download should start automatically.",
+      });
+      
+      // Close form after successful submission
+      setShowBrochureForm(false);
+    } catch (error) {
+      console.error("Error downloading brochure:", error);
+      toast({
+        title: "Error",
+        description: "There was a problem downloading the brochure. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <section className="relative py-24">
+    <section className="relative py-24 my-8">
       {/* Background image with overlay */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center"
@@ -72,7 +125,53 @@ const CtaSection = () => {
                 Please fill in your details to receive our exclusive brochure with floor plans and pricing details.
               </p>
               
-              <ContactForm formType="brochure" />
+              <form onSubmit={handleBrochureDownload} className="space-y-4">
+                <div>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Your Name *"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  />
+                </div>
+                
+                <div>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Email Address *"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  />
+                </div>
+                
+                <div>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Phone Number *"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  />
+                </div>
+                
+                <div>
+                  <Button 
+                    type="submit" 
+                    disabled={loading}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-md font-medium"
+                  >
+                    {loading ? 'Processing...' : 'Download Brochure'}
+                  </Button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

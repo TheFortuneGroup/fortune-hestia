@@ -114,6 +114,35 @@
     @apply bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent;
   }
 
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .section-padding {
+      @apply py-12;
+    }
+    
+    .container {
+      @apply px-5;
+    }
+    
+    .section-title {
+      @apply text-center mx-auto;
+    }
+    
+    .section-title::after {
+      @apply left-1/2 -translate-x-1/2;
+    }
+    
+    /* Make grid items on mobile centered */
+    .grid {
+      @apply items-center;
+    }
+    
+    /* Add spacing between sections */
+    section + section {
+      @apply mt-8;
+    }
+  }
+
   /* New animation classes for popup */
   .animate-fade-in {
     animation: fadeIn 0.3s ease-out forwards;
@@ -129,6 +158,23 @@
 
   .enhanced-form-input {
     @apply w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all duration-200;
+  }
+  
+  /* Floor plan styles */
+  .floor-plan-card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300;
+  }
+  
+  .direction-badge {
+    @apply inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-emerald-100 text-emerald-700;
+  }
+  
+  .feature-list-item {
+    @apply flex items-center text-gray-700 mb-1;
+  }
+  
+  .feature-bullet {
+    @apply w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 flex-shrink-0;
   }
 }
 
@@ -171,4 +217,44 @@
 /* Enhanced card styles */
 .enhanced-card {
   @apply bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl;
+}
+
+/* Villa type styles */
+.villa-type-card {
+  @apply border rounded-lg p-6 transition-all hover:shadow-lg hover:border-emerald-300;
+}
+
+.villa-type-card.active {
+  @apply border-emerald-500 shadow-lg;
+}
+
+.villa-feature-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6;
+}
+
+/* Add more spacing in mobile view */
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-center;
+  }
+  
+  p {
+    @apply text-center;
+  }
+  
+  .flex:not(.flex-col) {
+    @apply justify-center;
+  }
+  
+  section {
+    @apply py-12 space-y-8;
+  }
+  
+  .grid {
+    @apply gap-8;
+  }
 }

@@ -26,17 +26,17 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 md:px-6 relative z-10 pt-24">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
           {/* Hero content */}
-          <div className="lg:col-span-3 text-white animate-fade-in">
+          <div className="lg:col-span-3 text-white animate-fade-in text-center lg:text-left">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               Luxury Living Redefined at <span className="text-emerald-400">Fortune Hestia Villa</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl">
+            <p className="text-lg md:text-xl text-gray-200 mb-8 mx-auto lg:mx-0 max-w-2xl">
               Experience architectural brilliance in Sarjapur Road's most prestigious address. 
               Premium villas starting from ₹5.3 Cr with world-class amenities.
             </p>
             
-            <div className="flex flex-wrap gap-4 mb-12">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-12">
               <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-md px-6 py-6 text-lg flex items-center gap-2 shadow-lg shadow-emerald-900/20">
                 Schedule a Visit
                 <ArrowRight size={18} />
@@ -46,7 +46,7 @@ const HeroSection = () => {
               </Button>
             </div>
             
-            <div className="flex flex-wrap gap-x-12 gap-y-6 text-gray-300">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-gray-300 justify-center">
               <div className="bg-emerald-900/30 backdrop-blur-sm p-4 rounded-lg border border-emerald-600/20 animate-pulse-subtle">
                 <p className="text-3xl md:text-4xl font-serif font-semibold text-emerald-400">10+</p>
                 <p className="text-sm uppercase tracking-wider mt-1">Luxury Amenities</p>
@@ -64,8 +64,8 @@ const HeroSection = () => {
           
           {/* Contact form card */}
           <div className="lg:col-span-2 animate-fade-in-right">
-            <div className="bg-white rounded-lg shadow-xl p-6 md:p-8 border-t-4 border-emerald-500">
-              <h3 className="font-serif text-2xl font-semibold text-emerald-700 mb-6">Schedule Your Private Tour</h3>
+            <div className="bg-white rounded-lg shadow-xl p-6 md:p-8 border-t-4 border-emerald-500 mb-12">
+              <h3 className="font-serif text-2xl font-semibold text-emerald-700 mb-6 text-center">Schedule Your Private Tour</h3>
               <ContactForm />
             </div>
           </div>

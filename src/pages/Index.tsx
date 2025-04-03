@@ -9,6 +9,7 @@ import LocationSection from "@/components/home/LocationSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CtaSection from "@/components/home/CtaSection";
 import ContactSection from "@/components/home/ContactSection";
+import FloorPlansSection from "@/components/home/FloorPlansSection";
 import PopupForm from "@/components/home/PopupForm";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -20,8 +21,13 @@ const Index = () => {
         <HeroSection />
         <AboutSection />
         <FeaturesSection />
+        <div className="py-8 md:py-12"></div> {/* Spacing */}
+        <FloorPlansSection />
+        <div className="py-8 md:py-12"></div> {/* Spacing */}
         <GallerySection />
+        <div className="py-8 md:py-12"></div> {/* Spacing */}
         <LocationSection />
+        <div className="py-8 md:py-12"></div> {/* Spacing */}
         <TestimonialsSection />
         <CtaSection />
         <ContactSection />
