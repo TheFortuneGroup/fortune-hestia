@@ -21,6 +21,54 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+const mockLeads = [
+  {
+    id: '1',
+    name: 'Arun Sharma',
+    email: 'arun.sharma@example.com',
+    phone: '+91 9876543210',
+    date: '2025-03-28',
+    status: 'New',
+    property_interest: '4BHK'
+  },
+  {
+    id: '2',
+    name: 'Priya Patel',
+    email: 'priya.patel@example.com',
+    phone: '+91 9876543211',
+    date: '2025-03-27',
+    status: 'Contacted',
+    property_interest: '5BHK'
+  },
+  {
+    id: '3',
+    name: 'Rajiv Malhotra',
+    email: 'rajiv.m@example.com',
+    phone: '+91 9876543212',
+    date: '2025-03-26',
+    status: 'Interested',
+    property_interest: 'Both'
+  },
+  {
+    id: '4',
+    name: 'Sneha Kumar',
+    email: 'sneha.k@example.com',
+    phone: '+91 9876543213',
+    date: '2025-03-25',
+    status: 'Visited',
+    property_interest: '5BHK'
+  },
+  {
+    id: '5',
+    name: 'Vikram Singh',
+    email: 'vikram.s@example.com',
+    phone: '+91 9876543214',
+    date: '2025-03-24',
+    status: 'Closed',
+    property_interest: '4BHK'
+  }
+];
+
 const ImageUploader = () => {
   const { toast } = useToast();
   const [category, setCategory] = useState("exterior");
@@ -98,8 +146,7 @@ const ImageUploader = () => {
         .insert({
           name: imageName,
           url: publicUrl,
-          category: category,
-          subcategory: subCategory
+          category: `${category}_${subCategory}`
         });
       
       if (error) throw error;
@@ -321,7 +368,7 @@ const ImageUploader = () => {
                       <div>
                         <p className="font-medium text-sm truncate">{image.name}</p>
                         <p className="text-xs text-gray-500 capitalize">
-                          {image.category} - {image.subcategory?.replace(/_/g, ' ')}
+                          {image.category?.replace(/_/g, ' ')}
                         </p>
                       </div>
                       <Button 

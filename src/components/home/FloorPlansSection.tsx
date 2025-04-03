@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,6 +7,7 @@ import { VillaHighlights } from './villa/VillaHighlights';
 import { villaTypes } from './villa/villaData';
 import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import ContactForm from './ContactForm';
 
 const FloorPlansSection = () => {
   const [selectedDirection, setSelectedDirection] = useState<VillaDirection>("North");
@@ -34,22 +34,22 @@ const FloorPlansSection = () => {
         
         if (data) {
           // Organize floor plans by direction
-          const northPlans = data.filter(plan => plan.subcategory?.includes('north_')).map(plan => ({
+          const northPlans = data.filter(plan => plan.category?.includes('north_')).map(plan => ({
             image: plan.url,
             title: `${plan.name || 'Floor Plan'}`
           }));
           
-          const southPlans = data.filter(plan => plan.subcategory?.includes('south_')).map(plan => ({
+          const southPlans = data.filter(plan => plan.category?.includes('south_')).map(plan => ({
             image: plan.url,
             title: `${plan.name || 'Floor Plan'}`
           }));
           
-          const eastPlans = data.filter(plan => plan.subcategory?.includes('east_')).map(plan => ({
+          const eastPlans = data.filter(plan => plan.category?.includes('east_')).map(plan => ({
             image: plan.url,
             title: `${plan.name || 'Floor Plan'}`
           }));
           
-          const westPlans = data.filter(plan => plan.subcategory?.includes('west_')).map(plan => ({
+          const westPlans = data.filter(plan => plan.category?.includes('west_')).map(plan => ({
             image: plan.url,
             title: `${plan.name || 'Floor Plan'}`
           }));
