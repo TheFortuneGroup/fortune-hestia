@@ -2,13 +2,45 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import ContactForm from './ContactForm';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 const HeroSection = () => {
+  const [showContactDialog, setShowContactDialog] = useState(false);
+  
   const scrollToNextSection = () => {
     const aboutSection = document.getElementById('about');
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleScheduleVisit = () => {
+    setShowContactDialog(true);
+  };
+
+  const handleDownloadBrochure = () => {
+    // Create a "dummy" download for the brochure
+    const link = document.createElement('a');
+    link.href = '/fortune-hestia-brochure.pdf'; // This would be replaced with the actual brochure
+    link.download = 'Fortune-Hestia-Villa-Brochure.pdf';
+    link.target = '_blank';
+    
+    // Add fallback for browsers that don't support download attribute
+    link.onclick = (e) => {
+      // If the file doesn't exist, show a message
+      const toast = document.createEvent('CustomEvent');
+      toast.initCustomEvent('toast', true, true, {
+        title: 'Brochure Download',
+        description: 'Your brochure download has started. Thank you for your interest!',
+        variant: 'default',
+      });
+      document.dispatchEvent(toast);
+    };
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -37,16 +69,23 @@ const HeroSection = () => {
             </p>
             
             <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-12">
-              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-md px-6 py-6 text-lg flex items-center gap-2 shadow-lg shadow-emerald-900/20">
+              <Button 
+                className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-md px-6 py-6 text-lg flex items-center gap-2 shadow-lg shadow-emerald-900/20"
+                onClick={handleScheduleVisit}
+              >
                 Schedule a Visit
                 <ArrowRight size={18} />
               </Button>
-              <Button variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white/10 rounded-md px-6 py-6 text-lg">
+              <Button 
+                variant="outline" 
+                className="bg-transparent border-2 border-white text-white hover:bg-white/10 rounded-md px-6 py-6 text-lg"
+                onClick={handleDownloadBrochure}
+              >
                 Download Brochure
               </Button>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-gray-300 justify-center">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-4 text-gray-300">
               <div className="bg-emerald-900/30 backdrop-blur-sm p-4 rounded-lg border border-emerald-600/20 animate-pulse-subtle">
                 <p className="text-3xl md:text-4xl font-serif font-semibold text-emerald-400">10+</p>
                 <p className="text-sm uppercase tracking-wider mt-1">Luxury Amenities</p>
@@ -54,10 +93,6 @@ const HeroSection = () => {
               <div className="bg-emerald-900/30 backdrop-blur-sm p-4 rounded-lg border border-emerald-600/20 animate-pulse-subtle">
                 <p className="text-3xl md:text-4xl font-serif font-semibold text-emerald-400">4 & 5 BHK</p>
                 <p className="text-sm uppercase tracking-wider mt-1">Premium Villas</p>
-              </div>
-              <div className="bg-emerald-900/30 backdrop-blur-sm p-4 rounded-lg border border-emerald-600/20 animate-pulse-subtle">
-                <p className="text-3xl md:text-4xl font-serif font-semibold text-emerald-400">15 Min</p>
-                <p className="text-sm uppercase tracking-wider mt-1">To Tech Parks</p>
               </div>
             </div>
           </div>
@@ -81,6 +116,18 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+
+      {/* Tour scheduling dialog */}
+      <Dialog open={showContactDialog} onOpenChange={setShowContactDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-center text-2xl font-serif text-emerald-700">
+              Schedule Your Private Tour
+            </DialogTitle>
+          </DialogHeader>
+          <ContactForm variant="dialog" onSuccess={() => setShowContactDialog(false)} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

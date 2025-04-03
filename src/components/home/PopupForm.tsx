@@ -1,197 +1,213 @@
 
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/use-toast';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useToast } from '@/components/ui/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { X } from 'lucide-react';
+
+const formSchema = z.object({
+  name: z.string().min(2, {
+    message: 'Name must be at least 2 characters.',
+  }),
+  email: z.string().email({
+    message: 'Please enter a valid email address.',
+  }),
+  phone: z.string().min(10, {
+    message: 'Please enter a valid phone number.',
+  }),
+  interest: z.enum(['General Inquiry', 'Schedule Visit', 'Price Details'], {
+    required_error: 'Please select your interest.',
+  }),
+  consent: z.boolean().refine(val => val === true, {
+    message: 'You must agree to the terms.',
+  }),
+});
 
 const PopupForm = () => {
+  const { toast } = useToast();
   const [showPopup, setShowPopup] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    budget: '',
-    preferredUnit: '',
-    preferredDirection: '',
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      interest: 'General Inquiry',
+      consent: false,
+    },
   });
-  const [loading, setLoading] = useState(false);
 
+  // Show popup after 30 seconds on the page
   useEffect(() => {
-    // Show popup after 5 seconds
-    const timer = setTimeout(() => {
-      // Check if user has already closed the popup in this session
-      const hasClosedPopup = sessionStorage.getItem('popupClosed');
-      if (!hasClosedPopup) {
+    const hasShownPopup = sessionStorage.getItem('hasShownPopup');
+    
+    if (!hasShownPopup) {
+      const timer = setTimeout(() => {
         setShowPopup(true);
-      }
-    }, 5000);
-
-    return () => clearTimeout(timer);
+        sessionStorage.setItem('hasShownPopup', 'true');
+      }, 30000);
+      
+      return () => clearTimeout(timer);
+    }
   }, []);
 
-  const handleClose = () => {
-    setShowPopup(false);
-    // Remember that the user closed the popup in this session
-    sessionStorage.setItem('popupClosed', 'true');
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      // Simulate API call
-      console.log(`Sending form data to dm@fortunehestia.in: ${JSON.stringify(formData)}`);
-      
-      // In a real implementation, this would be an actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      console.log(values);
+      setIsSubmitting(false);
+      setShowPopup(false);
       
       toast({
-        title: "Interest registered!",
-        description: "Our team will contact you shortly with exclusive offers.",
+        title: "Thank You!",
+        description: "Our team will contact you shortly with more information.",
       });
       
-      // Close popup after successful submission
-      handleClose();
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast({
-        title: "Error",
-        description: "There was a problem submitting your request. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (!showPopup) return null;
+      form.reset();
+    }, 1500);
+  }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden animate-scale-in">
-        <button
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-colors"
-          onClick={handleClose}
+    <Dialog open={showPopup} onOpenChange={setShowPopup}>
+      <DialogContent className="sm:max-w-[450px] p-0 overflow-hidden bg-white rounded-lg">
+        <button 
+          onClick={() => setShowPopup(false)} 
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 z-10"
         >
-          <X size={24} />
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
         </button>
         
-        <div className="bg-emerald-600 py-6 px-6">
-          <h3 className="text-white font-serif text-2xl font-bold text-center">Exclusive Villa Offer!</h3>
-          <p className="text-white/80 text-center mt-2">Limited Time - Premium Location</p>
-        </div>
-        
-        <div className="p-6">
-          <p className="text-emerald-800 mb-4 text-center font-medium">
-            Register now to get priority access and receive our exclusive offers with special discounts!
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-4">
+          <div className="md:col-span-4 bg-emerald-700 text-white p-6">
+            <DialogTitle className="text-xl font-serif font-semibold mb-2">
+              Get Exclusive Pricing & Offers!
+            </DialogTitle>
+            <p className="text-emerald-100 text-sm">
+              Register now to receive special pre-launch benefits on Fortune Hestia Villa
+            </p>
+          </div>
           
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Your Name *"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
-              />
-            </div>
-            
-            <div>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email Address *"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
-              />
-            </div>
-            
-            <div>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Phone Number *"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
-              />
-            </div>
-
-            <div>
-              <select
-                name="budget"
-                value={formData.budget}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
-              >
-                <option value="">Select Budget Range</option>
-                <option value="5-6cr">₹5 Cr - ₹6 Cr</option>
-                <option value="6-7cr">₹6 Cr - ₹7 Cr</option>
-                <option value="7-8cr">₹7 Cr - ₹8 Cr</option>
-                <option value="8cr+">Above ₹8 Cr</option>
-              </select>
-            </div>
-
-            <div>
-              <select
-                name="preferredUnit"
-                value={formData.preferredUnit}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
-              >
-                <option value="">Preferred Unit Type</option>
-                <option value="4bhk">4 BHK Villa</option>
-                <option value="5bhk">5 BHK Villa</option>
-              </select>
-            </div>
-
-            <div>
-              <select
-                name="preferredDirection"
-                value={formData.preferredDirection}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
-              >
-                <option value="">Preferred Direction</option>
-                <option value="north">North Facing</option>
-                <option value="south">South Facing</option>
-                <option value="east">East Facing</option>
-                <option value="west">West Facing</option>
-              </select>
-            </div>
-            
-            <div>
-              <Button 
-                type="submit" 
-                disabled={loading}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-md font-medium relative"
-              >
-                {loading ? 'Processing...' : 'Get Exclusive Offers'}
-              </Button>
-            </div>
-          </form>
-          
-          <p className="text-xs text-gray-500 text-center mt-4">
-            By submitting this form, you agree to our privacy policy and terms of service.
-          </p>
+          <div className="p-6 md:col-span-4">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="John Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="john@example.com" type="email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone</FormLabel>
+                        <FormControl>
+                          <Input placeholder="+91 9876543210" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <FormField
+                  control={form.control}
+                  name="interest"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>I'm interested in</FormLabel>
+                      <select
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        {...field}
+                      >
+                        <option value="General Inquiry">General Information</option>
+                        <option value="Schedule Visit">Scheduling a Site Visit</option>
+                        <option value="Price Details">Detailed Pricing & Floor Plans</option>
+                      </select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="consent"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-2 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-xs text-gray-500">
+                          I agree to receive communications about Fortune Hestia Villa.
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                
+                <Button 
+                  type="submit" 
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Get Exclusive Offers'}
+                </Button>
+                <p className="text-center text-xs text-gray-500 mt-2">
+                  Limited-time pre-launch benefits available now!
+                </p>
+              </form>
+            </Form>
+          </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

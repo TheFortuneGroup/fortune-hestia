@@ -2,15 +2,52 @@
 import { Check } from 'lucide-react';
 
 const FeaturesSection = () => {
-  const features = [
-    { title: "Smart Home Integration", description: "Complete home automation with smart controls for lighting, security, and climate." },
-    { title: "Private Pool", description: "Personal temperature-controlled pool with elegant deck area for entertaining." },
-    { title: "Italian Marble Flooring", description: "Imported Italian marble throughout the main living areas for timeless elegance." },
-    { title: "Designer Kitchen", description: "Gourmet kitchen with premium appliances and custom cabinets." },
-    { title: "Home Theater", description: "Dedicated home theater room with acoustic paneling and projection system." },
-    { title: "Floor-to-Ceiling Windows", description: "Abundant natural light with premium insulated glass for energy efficiency." },
-    { title: "Landscaped Gardens", description: "Professionally designed landscaping with mature plants and irrigation system." },
-    { title: "Multi-Car Garage", description: "Spacious garage with premium finishes and EV charging capabilities." },
+  const amenities = [
+    { 
+      title: "Gym", 
+      description: "State-of-the-art fitness center with modern equipment",
+      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#1"
+    },
+    { 
+      title: "Tennis Court", 
+      description: "Professional tennis court with night lighting",
+      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#2"
+    },
+    { 
+      title: "Amphitheater", 
+      description: "Open-air amphitheater for community events",
+      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#3"
+    },
+    { 
+      title: "Club House", 
+      description: "Luxurious club house with indoor games and lounge",
+      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#4"
+    },
+    { 
+      title: "Play Park", 
+      description: "Children's play area with safe modern equipment",
+      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#5"
+    },
+    { 
+      title: "Swimming Pool", 
+      description: "Temperature-controlled swimming pool with deck area",
+      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#6"
+    },
+    { 
+      title: "Jogging Track", 
+      description: "Dedicated jogging track for fitness enthusiasts",
+      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#7"
+    },
+    { 
+      title: "Garden Area", 
+      description: "Beautifully landscaped gardens for relaxation",
+      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#8"
+    },
+    { 
+      title: "Kids Play Area", 
+      description: "Dedicated play zone for children with safe equipment",
+      image: "/lovable-uploads/a26be2a9-6bb3-4b3a-938e-dddee8357e06.png#9"
+    }
   ];
 
   const specifications = [
@@ -27,24 +64,30 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section id="features" className="section-padding">
+    <section id="features" className="section-padding py-16 md:py-24">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="headline mb-6">Exceptional Features & Amenities</h2>
-          <p className="body-text">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-emerald-800 mb-6">Exceptional Features & Amenities</h2>
+          <p className="text-gray-700 text-lg">
             Fortune Hestia Villa offers an unparalleled living experience with premium features and world-class amenities that cater to your luxury lifestyle.
           </p>
         </div>
 
-        {/* Features grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-          {features.map((feature, index) => (
-            <div key={index} className="glass-card hover:shadow-xl transition-shadow h-full flex flex-col">
-              <div className="amenity-icon w-12 h-12 flex items-center justify-center">
-                <span className="text-xl font-bold">{index + 1}</span>
+        {/* Amenities grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+          {amenities.map((amenity, index) => (
+            <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow h-full flex flex-col">
+              <div className="aspect-w-16 aspect-h-9 bg-gray-100">
+                <img 
+                  src={amenity.image} 
+                  alt={amenity.title} 
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h3 className="feature-heading mb-3">{feature.title}</h3>
-              <p className="text-navy/70 text-sm flex-grow">{feature.description}</p>
+              <div className="p-4 flex flex-col flex-grow">
+                <h3 className="text-xl font-serif font-semibold text-emerald-700 text-center mb-2">{amenity.title}</h3>
+                <p className="text-gray-600 text-sm text-center">{amenity.description}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -52,14 +95,14 @@ const FeaturesSection = () => {
         {/* Specifications section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h3 className="subheadline mb-6">Premium Specifications</h3>
+            <h3 className="text-2xl font-serif font-semibold text-emerald-800 mb-6">Premium Specifications</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {specifications.map((spec, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="mr-3 mt-1 text-gold">
+                  <div className="mr-3 mt-1 text-emerald-600">
                     <Check size={18} />
                   </div>
-                  <p className="text-navy/80">{spec}</p>
+                  <p className="text-gray-700">{spec}</p>
                 </div>
               ))}
             </div>
@@ -71,7 +114,7 @@ const FeaturesSection = () => {
               alt="Villa Interior" 
               className="rounded-lg shadow-xl w-full h-auto object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent rounded-lg"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/50 to-transparent rounded-lg"></div>
             <div className="absolute bottom-6 left-6 right-6 text-white">
               <p className="font-serif text-xl md:text-2xl font-semibold mb-2">
                 Architectural Excellence

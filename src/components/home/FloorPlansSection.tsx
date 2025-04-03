@@ -14,22 +14,20 @@ import {
 } from 'lucide-react';
 
 const VillaType = ({ 
-  type, 
+  direction,
   area, 
   bedrooms, 
   bathrooms, 
   price, 
-  features, 
-  direction,
+  features,
   isActive = false
 }: { 
-  type: string; 
+  direction: "North" | "South" | "East" | "West";
   area: string; 
   bedrooms: number; 
   bathrooms: number; 
   price: string; 
   features: string[];
-  direction: "North" | "South" | "East" | "West";
   isActive?: boolean;
 }) => {
   const getDirectionIcon = () => {
@@ -44,7 +42,7 @@ const VillaType = ({
   return (
     <div className={`border rounded-lg p-6 transition-all ${isActive ? 'border-emerald-500 shadow-lg' : 'border-gray-200'}`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-serif font-semibold text-emerald-800">{type}</h3>
+        <h3 className="text-xl font-serif font-semibold text-emerald-800">Fortune Hestia Villa</h3>
         <div className="flex items-center gap-1">
           {getDirectionIcon()}
           <span className="text-emerald-700 text-sm">{direction} Facing</span>
@@ -114,172 +112,148 @@ const FloorPlan = ({ image, title }: { image: string; title: string }) => {
 };
 
 const FloorPlansSection = () => {
-  const [selectedTab, setSelectedTab] = useState("4bhk");
-  
   const villaTypes = {
-    "4bhk": [
-      {
-        type: "Emerald Villa - 4BHK",
-        area: "3500 sq ft",
-        bedrooms: 4,
-        bathrooms: 4.5,
-        price: "₹5.3 Cr",
-        features: ["Private Garden", "Double Height Living", "Italian Marble Flooring", "Smart Home Features"],
-        direction: "North" as const
-      },
-      {
-        type: "Sapphire Villa - 4BHK",
-        area: "3600 sq ft",
-        bedrooms: 4,
-        bathrooms: 4.5,
-        price: "₹5.5 Cr",
-        features: ["Terrace Garden", "Home Theater", "Modular Kitchen", "Walk-in Wardrobe"],
-        direction: "South" as const
-      },
-      {
-        type: "Ruby Villa - 4BHK",
-        area: "3700 sq ft",
-        bedrooms: 4,
-        bathrooms: 5,
-        price: "₹5.8 Cr",
-        features: ["Corner Plot", "Swimming Pool", "Home Office", "Premium Fittings"],
-        direction: "East" as const
-      },
-      {
-        type: "Opal Villa - 4BHK",
-        area: "3800 sq ft",
-        bedrooms: 4,
-        bathrooms: 5,
-        price: "₹6.2 Cr",
-        features: ["Private Pool", "Garden Patio", "Guest Suite", "German Kitchen"],
-        direction: "West" as const
-      }
-    ],
-    "5bhk": [
-      {
-        type: "Diamond Villa - 5BHK",
-        area: "4000 sq ft",
-        bedrooms: 5,
-        bathrooms: 5.5,
-        price: "₹6.5 Cr",
-        features: ["Rooftop Terrace", "Home Gym", "Wine Cellar", "Imported Fittings"],
-        direction: "North" as const
-      },
-      {
-        type: "Platinum Villa - 5BHK",
-        area: "4100 sq ft",
-        bedrooms: 5,
-        bathrooms: 5.5,
-        price: "₹6.8 Cr",
-        features: ["Corner Plot", "Jacuzzi", "Entertainment Zone", "Designer Landscaping"],
-        direction: "South" as const
-      },
-      {
-        type: "Gold Villa - 5BHK",
-        area: "4150 sq ft",
-        bedrooms: 5,
-        bathrooms: 6,
-        price: "₹7.2 Cr",
-        features: ["Panoramic View", "Spa Room", "Walk-in Closets", "Imported Marble"],
-        direction: "East" as const
-      },
-      {
-        type: "Titanium Villa - 5BHK",
-        area: "4200 sq ft",
-        bedrooms: 5,
-        bathrooms: 6,
-        price: "₹7.8 Cr",
-        features: ["Premium Corner", "Infinity Pool", "Bar Area", "Smart Home Automation"],
-        direction: "West" as const
-      }
-    ]
+    "North": {
+      area: "3650 sq ft",
+      bedrooms: 4,
+      bathrooms: 4.5,
+      price: "₹5.3 Cr",
+      features: ["Private Garden", "Double Height Living", "Italian Marble Flooring", "Smart Home Features"],
+      direction: "North" as const
+    },
+    "South": {
+      area: "3650 sq ft",
+      bedrooms: 4,
+      bathrooms: 4.5,
+      price: "₹5.5 Cr",
+      features: ["Terrace Garden", "Home Theater", "Modular Kitchen", "Walk-in Wardrobe"],
+      direction: "South" as const
+    },
+    "East": {
+      area: "3650 sq ft",
+      bedrooms: 4,
+      bathrooms: 5,
+      price: "₹5.8 Cr",
+      features: ["Corner Plot", "Swimming Pool", "Home Office", "Premium Fittings"],
+      direction: "East" as const
+    },
+    "West": {
+      area: "3650 sq ft",
+      bedrooms: 4,
+      bathrooms: 5,
+      price: "₹6.2 Cr",
+      features: ["Private Pool", "Garden Patio", "Guest Suite", "German Kitchen"],
+      direction: "West" as const
+    }
   };
 
   const floorPlans = {
-    "4bhk": [
-      { 
-        image: "/lovable-uploads/47ff2bfb-aac2-4c57-8739-3348f2edcc90.png", 
-        title: "4BHK Ground Floor" 
-      },
-      { 
-        image: "/lovable-uploads/ebf40fbe-d160-45c8-b2b7-1bfaba9366bc.png", 
-        title: "4BHK First Floor" 
-      },
-      { 
-        image: "/lovable-uploads/76c37ef2-49ee-49f7-a6b5-07a19f9ba26b.png", 
-        title: "4BHK Master Plan" 
-      }
+    "North": [
+      { image: "/lovable-uploads/47ff2bfb-aac2-4c57-8739-3348f2edcc90.png", title: "Ground Floor - North Facing" },
+      { image: "/lovable-uploads/ebf40fbe-d160-45c8-b2b7-1bfaba9366bc.png", title: "First Floor - North Facing" },
+      { image: "/lovable-uploads/76c37ef2-49ee-49f7-a6b5-07a19f9ba26b.png", title: "Master Plan - North Facing" }
     ],
-    "5bhk": [
-      { 
-        image: "/lovable-uploads/76c37ef2-49ee-49f7-a6b5-07a19f9ba26b.png", 
-        title: "5BHK Ground Floor" 
-      },
-      { 
-        image: "/lovable-uploads/47ff2bfb-aac2-4c57-8739-3348f2edcc90.png", 
-        title: "5BHK First Floor" 
-      },
-      { 
-        image: "/lovable-uploads/ebf40fbe-d160-45c8-b2b7-1bfaba9366bc.png", 
-        title: "5BHK Master Plan" 
-      }
+    "South": [
+      { image: "/lovable-uploads/76c37ef2-49ee-49f7-a6b5-07a19f9ba26b.png", title: "Ground Floor - South Facing" },
+      { image: "/lovable-uploads/47ff2bfb-aac2-4c57-8739-3348f2edcc90.png", title: "First Floor - South Facing" },
+      { image: "/lovable-uploads/ebf40fbe-d160-45c8-b2b7-1bfaba9366bc.png", title: "Master Plan - South Facing" }
+    ],
+    "East": [
+      { image: "/lovable-uploads/ebf40fbe-d160-45c8-b2b7-1bfaba9366bc.png", title: "Ground Floor - East Facing" },
+      { image: "/lovable-uploads/76c37ef2-49ee-49f7-a6b5-07a19f9ba26b.png", title: "First Floor - East Facing" },
+      { image: "/lovable-uploads/47ff2bfb-aac2-4c57-8739-3348f2edcc90.png", title: "Master Plan - East Facing" }
+    ],
+    "West": [
+      { image: "/lovable-uploads/47ff2bfb-aac2-4c57-8739-3348f2edcc90.png", title: "Ground Floor - West Facing" },
+      { image: "/lovable-uploads/76c37ef2-49ee-49f7-a6b5-07a19f9ba26b.png", title: "First Floor - West Facing" },
+      { image: "/lovable-uploads/ebf40fbe-d160-45c8-b2b7-1bfaba9366bc.png", title: "Master Plan - West Facing" }
     ]
   };
 
+  const [selectedDirection, setSelectedDirection] = useState<"North" | "South" | "East" | "West">("North");
+
   return (
-    <section id="floor-plans" className="section-padding bg-offwhite py-16 md:py-28">
+    <section id="floor-plans" className="section-padding bg-offwhite py-16 md:py-24">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
-          <h2 className="gradient-heading text-4xl md:text-5xl font-serif font-bold mb-4">
-            Floor Plans & Villa Types
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-emerald-800 mb-4">
+            Fortune Hestia Villa - Floor Plans
           </h2>
-          <p className="body-text max-w-3xl mx-auto">
+          <p className="text-gray-700 max-w-3xl mx-auto">
             Explore our thoughtfully designed floor plans offering spacious living areas, premium finishes, 
             and attention to every detail for an unparalleled luxury experience.
           </p>
         </div>
         
-        <Tabs defaultValue="4bhk" value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+        <Tabs 
+          defaultValue="North" 
+          value={selectedDirection} 
+          onValueChange={(value) => setSelectedDirection(value as "North" | "South" | "East" | "West")} 
+          className="w-full"
+        >
           <div className="flex justify-center mb-8">
-            <TabsList className="grid grid-cols-2 w-full max-w-md">
-              <TabsTrigger value="4bhk" className="font-serif text-lg">4 BHK Villas</TabsTrigger>
-              <TabsTrigger value="5bhk" className="font-serif text-lg">5 BHK Villas</TabsTrigger>
+            <TabsList className="grid grid-cols-4 w-full max-w-xl">
+              <TabsTrigger value="North" className="font-serif">North Facing</TabsTrigger>
+              <TabsTrigger value="South" className="font-serif">South Facing</TabsTrigger>
+              <TabsTrigger value="East" className="font-serif">East Facing</TabsTrigger>
+              <TabsTrigger value="West" className="font-serif">West Facing</TabsTrigger>
             </TabsList>
           </div>
           
-          <TabsContent value="4bhk" className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {villaTypes["4bhk"].map((villa, index) => (
-                <VillaType key={index} {...villa} />
-              ))}
-            </div>
-            
-            <div className="mt-12">
-              <h3 className="text-2xl font-serif font-semibold text-emerald-800 text-center mb-6">4 BHK Floor Plans</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {floorPlans["4bhk"].map((plan, index) => (
-                  <FloorPlan key={index} {...plan} />
-                ))}
+          {Object.entries(villaTypes).map(([direction, villa]) => (
+            <TabsContent key={direction} value={direction} className="space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <VillaType 
+                  direction={villa.direction}
+                  area={villa.area}
+                  bedrooms={villa.bedrooms}
+                  bathrooms={villa.bathrooms}
+                  price={villa.price}
+                  features={villa.features}
+                  isActive={selectedDirection === direction}
+                />
+                
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-xl font-serif font-semibold text-emerald-800 mb-4">
+                    Villa Highlights - {direction} Facing
+                  </h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <Check className="text-emerald-500 mr-2 mt-1 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Premium {direction.toLowerCase()}-facing orientation for optimal natural light</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="text-emerald-500 mr-2 mt-1 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Spacious 3650 sq ft layout with 4 bedrooms</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="text-emerald-500 mr-2 mt-1 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Double-height living room with panoramic windows</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="text-emerald-500 mr-2 mt-1 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Gourmet kitchen with premium European appliances</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="text-emerald-500 mr-2 mt-1 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Private garden and outdoor entertainment area</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="5bhk" className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {villaTypes["5bhk"].map((villa, index) => (
-                <VillaType key={index} {...villa} />
-              ))}
-            </div>
-            
-            <div className="mt-12">
-              <h3 className="text-2xl font-serif font-semibold text-emerald-800 text-center mb-6">5 BHK Floor Plans</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {floorPlans["5bhk"].map((plan, index) => (
-                  <FloorPlan key={index} {...plan} />
-                ))}
+              
+              <div className="mt-12">
+                <h3 className="text-2xl font-serif font-semibold text-emerald-800 text-center mb-6">
+                  {direction} Facing - Floor Plans
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {floorPlans[direction].map((plan, index) => (
+                    <FloorPlan key={index} {...plan} />
+                  ))}
+                </div>
               </div>
-            </div>
-          </TabsContent>
+            </TabsContent>
+          ))}
         </Tabs>
         
         <div className="mt-12 text-center">
