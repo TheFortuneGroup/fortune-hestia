@@ -9,7 +9,93 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      images: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          name: string
+          url: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          name: string
+          url: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+          phone: string
+          property_interest: string
+          status: string
+          timeframe: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          phone: string
+          property_interest: string
+          status?: string
+          timeframe: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string
+          property_interest?: string
+          status?: string
+          timeframe?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          address: string
+          brochure_link: string
+          contact_email: string
+          contact_phone: string
+          id: string
+          price_range: string
+          site_name: string
+        }
+        Insert: {
+          address?: string
+          brochure_link?: string
+          contact_email?: string
+          contact_phone?: string
+          id?: string
+          price_range?: string
+          site_name?: string
+        }
+        Update: {
+          address?: string
+          brochure_link?: string
+          contact_email?: string
+          contact_phone?: string
+          id?: string
+          price_range?: string
+          site_name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

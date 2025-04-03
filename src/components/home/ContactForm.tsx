@@ -6,7 +6,8 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import {
   Form,
   FormControl,
@@ -58,13 +59,22 @@ const ContactForm = ({ variant = 'inline', onSuccess }: ContactFormProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      console.log(values);
-      setIsSubmitting(false);
+    try {
+      // Save lead to Supabase
+      const { data, error } = await supabase
+        .from('leads')
+        .insert({
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          property_interest: values.propertyInterest,
+          timeframe: values.timeframe,
+        });
+        
+      if (error) throw error;
       
       toast({
         title: "Inquiry Submitted",
@@ -76,7 +86,16 @@ const ContactForm = ({ variant = 'inline', onSuccess }: ContactFormProps) => {
       if (onSuccess) {
         onSuccess();
       }
-    }, 1500);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "Submission Error",
+        description: "There was a problem submitting your inquiry. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
