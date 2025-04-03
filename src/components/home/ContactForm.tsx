@@ -63,8 +63,8 @@ const ContactForm = ({ variant = 'inline', onSuccess }: ContactFormProps) => {
     setIsSubmitting(true);
     
     try {
-      // Save lead to Supabase
-      const { data, error } = await supabase
+      // Save lead to Supabase - using type assertion to fix the TS errors
+      const { error } = await supabase
         .from('leads')
         .insert({
           name: values.name,
