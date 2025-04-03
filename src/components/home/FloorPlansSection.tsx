@@ -10,7 +10,8 @@ import {
   SquareIcon,
   BedDoubleIcon,
   BathIcon,
-  SofaIcon
+  SofaIcon,
+  Check
 } from 'lucide-react';
 
 const VillaType = ({ 
